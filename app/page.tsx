@@ -318,11 +318,9 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('beranda');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [articleSearch, setArticleSearch] = useState('');
-  const [activeCaseStudy, setActiveCaseStudy] = useState(null);
-  const [activeArticle, setActiveArticle] = useState(null);
-  const [customWaModal, setCustomWaModal] = useState({ open: false, text: '', title: '' });
+  const [activeCaseStudy, setActiveCaseStudy] = useState<any>(null);
+  const [activeArticle, setActiveArticle] = useState<any>(null);
   const [cvModalOpen, setCvModalOpen] = useState(false);
-  const [copiedCode, setCopiedCode] = useState(false);
 
   // Live Sanity Site Settings State
   const [siteSettings, setSiteSettings] = useState(DEFAULT_SITE_SETTINGS);
@@ -332,7 +330,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeTab]);
 
-  const handleWaRedirect = (customText) => {
+  const handleWaRedirect = (customText?: string) => {
     const defaultMsg = "Halo Alex Morgan, saya ingin berkonsultasi mengenai kebutuhan Business Analysis, SOP, dan Otomasi Proses Bisnis.";
     const encoded = encodeURIComponent(customText || defaultMsg);
     window.open(`https://wa.me/${siteSettings.waNumber}?text=${encoded}`, '_blank');
@@ -480,10 +478,7 @@ export default function App() {
       {/* Main Page Content Body */}
       <main className="min-h-[calc(100vh-20rem)]">
 
-        {/* ========================================== */}
-        {/* TAB 1: BERANDA (HOME PAGE)                 */}
-        {/* ========================================== */}
-        {}
+        {/* TAB 1: BERANDA (HOME PAGE) */}
         {activeTab === 'beranda' && (
           <div>
             {/* Hero Section */}
@@ -513,122 +508,62 @@ export default function App() {
                       className="px-6 py-3.5 bg-stone-100 border border-stone-300 text-stone-900 font-sans-editorial font-semibold text-xs uppercase tracking-wider hover:bg-stone-200 transition-all rounded-sm inline-flex items-center justify-center"
                     >
                       <IconWhatsApp className="w-4 h-4 mr-2 text-emerald-600" />
-                      Diskusi via WhatsApp
+                      Konsultasi Langsung
                     </button>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Impact Metrics Banner */}
-            {siteSettings.showMetrics && (
-              <section className="py-10 bg-stone-100/70 border-b border-stone-200">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    {[
-                      { number: "-78%", label: "Waktu Siklus Pemrosesan" },
-                      { number: "35+", label: "Dashboard Control Tower" },
-                      { number: "Rp 2.8M+", label: "Estimasi Hemat Biaya" },
-                      { number: "18+", label: "Proyek Sistem Operasional" }
-                    ].map((stat, i) => (
-                      <div key={i} className="border-l border-stone-300 pl-4">
-                        <div className="font-serif-editorial text-3xl sm:text-4xl font-bold text-stone-900 tracking-tight">
-                          {stat.number}
-                        </div>
-                        <div className="text-[11px] font-mono-code uppercase tracking-wider text-stone-500 mt-1">
-                          {stat.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* 3 Main Services Overview */}
-            <section className="py-20 border-b border-stone-200 bg-white">
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="max-w-2xl mb-12">
-                  <span className="text-xs font-mono-code uppercase tracking-widest text-amber-900 block mb-1">Skema Pendampingan</span>
-                  <h2 className="font-serif-editorial text-3xl font-bold text-stone-900">3 Ringkasan Paket Solusi Operasional</h2>
-                  <p className="text-stone-600 text-sm mt-2">
-                    Metodologi terstruktur untuk membantu efisiensi bisnis, mulai dari audit awal hingga integrasi sistem penuh.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {SERVICES.map((srv) => (
-                    <div key={srv.id} className="border border-stone-200 p-6 bg-[#FAF9F6] rounded-sm flex flex-col justify-between">
-                      <div>
-                        <div className="text-[11px] font-mono-code text-amber-900 uppercase tracking-widest mb-1">{srv.packageCode} • {srv.tier}</div>
-                        <h3 className="font-serif-editorial text-xl font-bold text-stone-900 mb-2">{srv.title}</h3>
-                        <span className="text-xs font-mono-code bg-stone-200 text-stone-800 px-2 py-0.5 inline-block mb-4">
-                          Durasi: {srv.duration}
-                        </span>
-                        <p className="text-xs text-stone-600 mb-6 italic">{srv.idealFor}</p>
-                      </div>
-                      <button
-                        onClick={() => setActiveTab('produk-layanan')}
-                        className="w-full text-center py-2 border border-stone-900 text-stone-900 text-xs font-bold uppercase tracking-wider hover:bg-stone-900 hover:text-stone-50 transition-colors"
-                      >
-                        Detail Scope Paket
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
             {/* Featured Case Studies */}
-            <section className="py-20 border-b border-stone-200">
+            <section className="py-16 border-b border-stone-200">
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-4 border-b border-stone-200">
+                <div className="flex justify-between items-end mb-10">
                   <div>
-                    <span className="text-xs font-mono-code uppercase tracking-widest text-amber-900 block mb-1">Portofolio Pilihan</span>
-                    <h2 className="font-serif-editorial text-3xl font-bold text-stone-900">Studi Kasus Laporan Bisnis</h2>
+                    <h2 className="font-serif-editorial text-2xl sm:text-3xl font-bold text-stone-900">
+                      Studi Kasus Pilihan
+                    </h2>
+                    <p className="text-stone-600 text-sm mt-1">
+                      Hasil nyata re-engineering proses dan arsitektur data.
+                    </p>
                   </div>
-                  <button
-                    onClick={() => setActiveTab('studi-kasus')}
-                    className="mt-4 md:mt-0 text-xs font-bold uppercase tracking-wider text-stone-900 hover:text-amber-800 transition-colors inline-flex items-center"
+                  <button 
+                    onClick={() => setActiveTab('studi-kasus')} 
+                    className="text-xs font-bold uppercase tracking-wider text-stone-900 hover:text-stone-600"
                   >
-                    Lihat Semua Laporan <IconArrowRight />
+                    Lihat Semua ({CASE_STUDIES.length}) &rarr;
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                  {CASE_STUDIES.slice(0, 2).map((cs) => (
-                    <div 
-                      key={cs.id}
-                      className="bg-white border border-stone-200 p-8 rounded-sm hover:shadow-md transition-shadow flex flex-col justify-between"
-                    >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {CASE_STUDIES.filter(cs => cs.featured).map(cs => (
+                    <div key={cs.id} className="border border-stone-300 bg-white p-6 rounded flex flex-col justify-between">
                       <div>
-                        <div className="flex items-center justify-between text-xs font-mono-code text-stone-500 mb-3">
-                          <span className="text-amber-900 font-semibold">{cs.clientCategory}</span>
+                        <div className="flex justify-between text-xs font-mono-code text-stone-500 mb-3">
+                          <span>{cs.clientCategory}</span>
                           <span>{cs.date}</span>
                         </div>
-                        <h3 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-3 leading-snug">
+                        <h3 className="font-serif-editorial text-xl font-bold mb-3 text-stone-900">
                           {cs.title}
                         </h3>
-                        <p className="text-stone-600 text-sm leading-relaxed mb-6">
-                          {cs.problemStatement}
+                        <p className="text-stone-600 text-sm mb-6 leading-relaxed">
+                          {cs.solutionSummary}
                         </p>
                       </div>
-
                       <div>
-                        <div className="bg-stone-50 border border-stone-200 p-4 rounded-sm grid grid-cols-3 gap-2 mb-6 text-center">
-                          {cs.impactMetrics.map((m, idx) => (
-                            <div key={idx}>
-                              <div className="font-serif-editorial text-lg font-bold text-stone-900">{m.value}</div>
-                              <div className="text-[10px] font-mono-code text-stone-500 uppercase truncate">{m.label}</div>
+                        <div className="grid grid-cols-3 gap-2 py-3 my-4 border-y border-stone-200 text-center bg-stone-50">
+                          {cs.impactMetrics.map((m, i) => (
+                            <div key={i}>
+                              <div className="font-mono-code font-bold text-stone-900 text-sm">{m.value}</div>
+                              <div className="text-[10px] text-stone-500">{m.label}</div>
                             </div>
                           ))}
                         </div>
-
                         <button
                           onClick={() => setActiveCaseStudy(cs)}
-                          className="w-full text-center py-2.5 border border-stone-900 text-stone-900 text-xs font-bold uppercase tracking-wider hover:bg-stone-900 hover:text-stone-50 transition-colors"
+                          className="w-full text-center py-2 bg-stone-100 hover:bg-stone-200 text-stone-900 font-mono-code text-xs font-bold uppercase"
                         >
-                          Baca Laporan Bisnis
+                          Baca Detail Studi Kasus
                         </button>
                       </div>
                     </div>
@@ -636,990 +571,239 @@ export default function App() {
                 </div>
               </div>
             </section>
-
-            {/* Testimonials Section */}
-            {siteSettings.showTestimonials && (
-              <section className="py-16 bg-stone-100/60 border-b border-stone-200">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className="mb-10">
-                    <span className="text-xs font-mono-code uppercase tracking-widest text-amber-900 block mb-1">Testimoni Klien</span>
-                    <h2 className="font-serif-editorial text-3xl font-bold text-stone-900">Apa Kata Pemimpin Operasional</h2>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {TESTIMONIALS.map((t, i) => (
-                      <div key={i} className="bg-white p-8 border border-stone-200 rounded-sm">
-                        <p className="font-serif-editorial italic text-stone-800 text-lg leading-relaxed mb-6">
-                          "{t.quote}"
-                        </p>
-                        <div>
-                          <div className="font-sans-editorial font-bold text-sm text-stone-900">{t.name}</div>
-                          <div className="text-xs font-mono-code text-stone-500">{t.role}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* Recruiter Callout Banner */}
-            <section className="py-16 bg-stone-900 text-stone-100">
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div>
-                  <span className="text-xs font-mono-code uppercase tracking-widest text-amber-400 block mb-2">Corporate & Enterprise Recruiters</span>
-                  <h3 className="font-serif-editorial text-3xl font-bold text-white mb-2">Mencari Senior Business Analyst Berpengalaman?</h3>
-                  <p className="text-stone-300 text-sm max-w-xl leading-relaxed">
-                    Terbuka untuk posisi full-time / kontrak strategis di perusahaan berskala besar. Unduh resume terstruktur ATS-friendly untuk melihat rekam jejak formal.
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-                  <button
-                    onClick={() => setCvModalOpen(true)}
-                    className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 font-sans-editorial font-bold text-xs uppercase tracking-wider inline-flex items-center justify-center"
-                  >
-                    <IconDownload />
-                    Lihat ATS Resume PDF
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('tentang')}
-                    className="px-6 py-3 border border-stone-700 hover:bg-stone-800 text-stone-200 font-sans-editorial font-semibold text-xs uppercase tracking-wider"
-                  >
-                    Profil Lengkap
-                  </button>
-                </div>
-              </div>
-            </section>
           </div>
         )}
 
-        {/* ========================================== */}
-        {/* TAB 2: TENTANG (ABOUT PAGE)                */}
-        {/* ========================================== */}
-        {}
+        {/* TAB 2: TENTANG (ABOUT PAGE) */}
         {activeTab === 'tentang' && (
-          <div className="py-16 bg-[#FAF9F6]">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="mb-12 pb-8 border-b border-stone-200">
-                <span className="text-xs font-mono-code uppercase tracking-widest text-amber-900 block mb-2">Latar Belakang & Filosofi</span>
-                <h1 className="font-serif-editorial text-4xl font-bold text-stone-900">{siteSettings.analystName}</h1>
-                <p className="text-stone-600 text-lg font-serif-editorial italic mt-2">
-                  Senior Business Analyst & Process Optimization Specialist berbasis di Jakarta, Indonesia.
-                </p>
-                
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <button
-                    onClick={() => setCvModalOpen(true)}
-                    className="px-4 py-2.5 bg-stone-900 text-stone-50 font-mono-code text-xs font-bold uppercase tracking-wider inline-flex items-center rounded-sm hover:bg-stone-800"
-                  >
-                    <IconDownload />
-                    Download ATS Resume (PDF)
-                  </button>
-                  <button
-                    onClick={() => handleWaRedirect("Halo Alex, saya recruiter / pimpinan ingin mendiskusikan peluang karier / proyek Senior BA.")}
-                    className="px-4 py-2.5 bg-stone-100 border border-stone-300 text-stone-900 font-mono-code text-xs uppercase tracking-wider hover:bg-stone-200"
-                  >
-                    <IconWhatsApp className="w-3.5 h-3.5 mr-1.5 text-emerald-600 inline" />
-                    Kontak Langsung
-                  </button>
-                </div>
-              </div>
-
-              {/* Bio Narrative */}
-              <div className="prose prose-stone max-w-none text-stone-800 text-base leading-relaxed space-y-6 mb-16 font-sans-editorial">
-                <p>
-                  Dengan pengalaman lebih dari 8 tahun di rantai pasok logistik, jasa keuangan, dan agensi teknologi B2B, saya mengkhususkan diri dalam mengidentifikasi hambatan struktural operasional dan mengubah workflow yang berantakan menjadi sistem yang terstandarisasi dan dapat diulang.
-                </p>
-                <p>
-                  Filosofi utama saya dalam analisis bisnis sangat sederhana: <strong>Teknologi harus memperjelas proses, bukan menyembunyikan kekacauan.</strong> Sebelum mengimplementasikan otomasi low-code atau query database SQL, saya melakukan wawancara diagnostik mendalam dan pemetaan alur proses swimlane di Miro untuk membangun satu sumber kebenaran data (single source of truth).
-                </p>
-              </div>
-
-              {/* Skillsets Matrix */}
-              <div className="mb-16">
-                <h2 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-6">Matriks Kompetensi Teknis</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  
-                  <div className="bg-white p-6 border border-stone-200 rounded-sm">
-                    <div className="text-[11px] font-mono-code uppercase tracking-wider text-amber-900 mb-2">Domain 01</div>
-                    <h3 className="font-serif-editorial text-xl font-bold text-stone-900 mb-3">Pemetaan Proses</h3>
-                    <p className="text-xs text-stone-600 mb-4 leading-relaxed">Diagram alur BPMN 2.0, arsitektur swimlane, matriks tanggung jawab RACI.</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {["Miro", "Lucidchart", "Visio", "Whimsical"].map(t => (
-                        <span key={t} className="text-[11px] font-mono-code bg-stone-100 text-stone-800 px-2 py-0.5 rounded">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 border border-stone-200 rounded-sm">
-                    <div className="text-[11px] font-mono-code uppercase tracking-wider text-amber-900 mb-2">Domain 02</div>
-                    <h3 className="font-serif-editorial text-xl font-bold text-stone-900 mb-3">Otomasi & Low-Code</h3>
-                    <p className="text-xs text-stone-600 mb-4 leading-relaxed">Pengembangan aplikasi internal low-code, trigger webhook, pipeline API.</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {["AppSheet", "Make (Integromat)", "Zapier", "Airtable", "Looker"].map(t => (
-                        <span key={t} className="text-[11px] font-mono-code bg-stone-100 text-stone-800 px-2 py-0.5 rounded">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-6 border border-stone-200 rounded-sm">
-                    <div className="text-[11px] font-mono-code uppercase tracking-wider text-amber-900 mb-2">Domain 03</div>
-                    <h3 className="font-serif-editorial text-xl font-bold text-stone-900 mb-3">Data & Analisis</h3>
-                    <p className="text-xs text-stone-600 mb-4 leading-relaxed">Pipeline ETL, dashboard BI eksekutif, perancangan skema relasi data.</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {["SQL", "Power BI", "Excel Power Query", "BigQuery"].map(t => (
-                        <span key={t} className="text-[11px] font-mono-code bg-stone-100 text-stone-800 px-2 py-0.5 rounded">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-              {/* Career Timeline */}
-              <div>
-                <h2 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-8">Riwayat Karier Professional</h2>
-                <div className="space-y-8 border-l border-stone-300 pl-6 ml-2">
-                  {[
-                    {
-                      year: "2023 - Sekarang",
-                      role: "Senior Business Analyst & Process Consultant (Independen)",
-                      desc: "Mendampingi direksi UMKM & enterprise regional dalam overhaul SOP, integrasi low-code, dan dashboard BI eksekutif."
-                    },
-                    {
-                      year: "2020 - 2023",
-                      role: "Lead Systems & Process Analyst • PT LogiTech Solutions Asia",
-                      desc: "Memimpin standarisasi SOP pengiriman di 3 hub distribusi utama; berhasil memangkas waktu proses order hingga 78%."
-                    },
-                    {
-                      year: "2018 - 2020",
-                      role: "Operations Business Analyst • FinVanguard Capital",
-                      desc: "Merancang konsolidasi pelaporan keuangan berbasis Power BI dan PostgreSQL untuk tata kelola multi-subsidiary."
-                    }
-                  ].map((item, idx) => (
-                    <div key={idx} className="relative">
-                      <div className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-stone-900"></div>
-                      <span className="text-xs font-mono-code text-amber-900 uppercase tracking-widest block mb-1">{item.year}</span>
-                      <h3 className="font-serif-editorial text-lg font-bold text-stone-900">{item.role}</h3>
-                      <p className="text-xs text-stone-600 mt-1 leading-relaxed">{item.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+            <h1 className="font-serif-editorial text-4xl font-bold text-stone-900 mb-6">Tentang Saya</h1>
+            <div className="prose prose-stone font-serif-editorial text-lg leading-relaxed space-y-4 text-stone-800">
+              <p>
+                Saya Alex Morgan, S.T., seorang Lead / Senior Business Analyst yang berfokus pada optimasi alur kerja, otomasi low-code, dan visualisasi data performa bisnis.
+              </p>
+              <p>
+                Dengan latar belakang teknik dan pengalaman menangani proyek dari efisiensi rantai pasok hingga dashboard eksekutif multi-cabang, saya percaya bahwa efisiensi sejati tidak berasal dari alat yang rumit, melainkan dari kejernihan proses awal.
+              </p>
             </div>
           </div>
         )}
 
-        {/* ========================================== */}
-        {/* TAB 3: STUDI KASUS (PORTFOLIO PAGE)        */}
-        {/* ========================================== */}
-        {}
+        {/* TAB 3: STUDI KASUS */}
         {activeTab === 'studi-kasus' && (
-          <div className="py-16 bg-[#FAF9F6]">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="max-w-3xl mb-12">
-                <span className="text-xs font-mono-code uppercase tracking-widest text-amber-900 block mb-2">Laporan Portofolio</span>
-                <h1 className="font-serif-editorial text-4xl font-bold text-stone-900">Studi Kasus Rekayasa Operasional</h1>
-                <p className="text-stone-600 text-sm mt-2">
-                  Analisis mendalam mengenai tantangan operasional, metodologi yang diterapkan, integrasi tools, dan dampak bisnis terukur.
-                </p>
-              </div>
-
-              {/* Category Filters */}
-              <div className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-stone-200">
-                {["All", "Automation", "Dashboarding", "SOP & Process Mapping", "Mentorship"].map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 text-xs font-mono-code uppercase tracking-wider rounded transition-all ${
-                      selectedCategory === cat
-                        ? 'bg-stone-900 text-stone-50 font-semibold'
-                        : 'bg-stone-100 text-stone-600 hover:bg-stone-200 border border-stone-200'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-
-              {/* List of Case Studies */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredCaseStudies.map((cs) => (
-                  <div key={cs.id} className="bg-white border border-stone-200 p-8 rounded-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between text-xs font-mono-code text-stone-500 mb-3">
-                        <span className="text-amber-900 font-semibold">{cs.clientCategory}</span>
-                        <span>{cs.readTime}</span>
-                      </div>
-                      <h3 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-3 leading-tight">
-                        {cs.title}
-                      </h3>
-                      <p className="text-stone-600 text-sm leading-relaxed mb-6">
-                        {cs.problemStatement}
-                      </p>
-                    </div>
-
-                    <div>
-                      <div className="bg-stone-50 border border-stone-200 p-4 rounded-sm grid grid-cols-3 gap-2 text-center mb-6">
-                        {cs.impactMetrics.map((m, idx) => (
-                          <div key={idx}>
-                            <div className="font-serif-editorial text-lg font-bold text-stone-900">{m.value}</div>
-                            <div className="text-[10px] font-mono-code text-stone-500 uppercase truncate">{m.label}</div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <button
-                        onClick={() => setActiveCaseStudy(cs)}
-                        className="w-full text-center py-2.5 border border-stone-900 text-stone-900 text-xs font-bold uppercase tracking-wider hover:bg-stone-900 hover:text-stone-50 transition-colors"
-                      >
-                        Lihat Laporan Lengkap
-                      </button>
-                    </div>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h1 className="font-serif-editorial text-3xl font-bold mb-8">Semua Studi Kasus</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {filteredCaseStudies.map(cs => (
+                <div key={cs.id} className="border border-stone-300 bg-white p-6 rounded flex flex-col justify-between">
+                  <div>
+                    <span className="text-xs font-mono-code text-stone-500 block mb-2">{cs.category}</span>
+                    <h3 className="font-serif-editorial text-xl font-bold mb-3">{cs.title}</h3>
+                    <p className="text-stone-600 text-sm mb-4">{cs.solutionSummary}</p>
                   </div>
-                ))}
-              </div>
-
+                  <button
+                    onClick={() => setActiveCaseStudy(cs)}
+                    className="w-full py-2 bg-stone-900 text-stone-50 text-xs font-bold uppercase"
+                  >
+                    Lihat Rincian
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
-        {/* ========================================== */}
-        {/* TAB 4: ARTIKEL (BLOG PAGE)                 */}
-        {/* ========================================== */}
-        {}
+        {/* TAB 4: ARTIKEL */}
         {activeTab === 'artikel' && (
-          <div className="py-16 bg-[#FAF9F6]">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="mb-12 pb-8 border-b border-stone-200 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
-                  <span className="text-xs font-mono-code uppercase tracking-widest text-amber-900 block mb-2">Pemikiran & Metodologi</span>
-                  <h1 className="font-serif-editorial text-4xl font-bold text-stone-900">Artikel & Tulisan Analisis</h1>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+            <h1 className="font-serif-editorial text-3xl font-bold mb-6">Artikel & Publikasi</h1>
+            <div className="relative mb-8">
+              <IconSearch />
+              <input
+                type="text"
+                placeholder="Cari artikel..."
+                value={articleSearch}
+                onChange={(e) => setArticleSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded bg-white text-sm"
+              />
+            </div>
+            <div className="space-y-6">
+              {filteredArticles.map(art => (
+                <div key={art.id} className="border-b border-stone-200 pb-6">
+                  <span className="text-xs font-mono-code text-stone-500">{art.publishDate} • {art.category}</span>
+                  <h2 className="font-serif-editorial text-2xl font-bold my-2 text-stone-900 hover:text-stone-600 cursor-pointer" onClick={() => setActiveArticle(art)}>
+                    {art.title}
+                  </h2>
+                  <p className="text-stone-600 text-sm mb-3">{art.excerpt}</p>
+                  <button onClick={() => setActiveArticle(art)} className="text-xs font-bold uppercase text-stone-900">
+                    Baca Selengkapnya &rarr;
+                  </button>
                 </div>
-
-                {/* Search Box */}
-                <div className="relative w-full md:w-64">
-                  <IconSearch />
-                  <input
-                    type="text"
-                    placeholder="Cari artikel..."
-                    value={articleSearch}
-                    onChange={(e) => setArticleSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-white border border-stone-300 text-xs text-stone-900 focus:outline-none focus:border-stone-900 rounded-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Substack/Medium Style Minimalist Reader List */}
-              <div className="divide-y divide-stone-200">
-                {filteredArticles.map((art) => (
-                  <article key={art.id} className="py-10 first:pt-0 group">
-                    <div className="flex items-center space-x-3 text-xs font-mono-code text-stone-500 mb-3">
-                      <span className="font-semibold text-stone-900">{art.category}</span>
-                      <span>•</span>
-                      <span>{art.publishDate}</span>
-                      <span>•</span>
-                      <span>{art.readTime}</span>
-                    </div>
-
-                    <h2 
-                      onClick={() => setActiveArticle(art)}
-                      className="font-serif-editorial text-3xl font-bold text-stone-900 group-hover:text-amber-900 cursor-pointer transition-colors mb-3 leading-snug"
-                    >
-                      {art.title}
-                    </h2>
-
-                    <p className="text-stone-600 leading-relaxed text-base mb-4 font-serif-editorial">
-                      {art.excerpt}
-                    </p>
-
-                    <button
-                      onClick={() => setActiveArticle(art)}
-                      className="text-xs font-bold uppercase tracking-wider text-stone-900 hover:text-amber-900 inline-flex items-center"
-                    >
-                      Baca Tulisan Lengkap <IconArrowRight />
-                    </button>
-                  </article>
-                ))}
-              </div>
-
+              ))}
             </div>
           </div>
         )}
 
-        {/* ========================================== */}
-        {/* TAB 5: PRODUK & LAYANAN (SERVICES & DIGITAL) */}
-        {/* ========================================== */}
-        {}
+        {/* TAB 5: PRODUK & LAYANAN */}
         {activeTab === 'produk-layanan' && (
-          <div className="py-16 bg-[#FAF9F6]">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="max-w-3xl mb-16">
-                <span className="text-xs font-mono-code uppercase tracking-widest text-amber-900 block mb-2">Penawaran & Aset</span>
-                <h1 className="font-serif-editorial text-4xl font-bold text-stone-900">Produk & Layanan Konsultasi</h1>
-                <p className="text-stone-600 text-base mt-2">
-                  Paket pendampingan operasional transparan, program pelatihan tim, serta template analisis digital siap pakai.
-                </p>
-              </div>
-
-              {/* SECTION A: PROFESSIONAL SERVICES TABLE / CARDS */}
-              <div className="mb-20">
-                <h2 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-8 pb-3 border-b border-stone-200">
-                  Paket Konsultasi Operasional Utama
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {SERVICES.map((srv) => (
-                    <div 
-                      key={srv.id}
-                      className="bg-white border border-stone-200 p-8 rounded-sm shadow-sm flex flex-col justify-between relative"
-                    >
-                      {srv.packageCode === 'Paket 2' && (
-                        <span className="absolute top-0 right-0 bg-stone-900 text-stone-100 font-mono-code text-[10px] uppercase tracking-wider px-3 py-1">
-                          Paling Populer
-                        </span>
-                      )}
-
-                      <div>
-                        <div className="text-xs font-mono-code text-amber-900 uppercase tracking-widest mb-1">
-                          {srv.packageCode} • {srv.tier}
-                        </div>
-                        <h3 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-2">{srv.title}</h3>
-                        <div className="text-xs font-mono-code bg-stone-100 text-stone-700 px-2.5 py-1 inline-block mb-4">
-                          Durasi: {srv.duration}
-                        </div>
-
-                        <p className="text-xs text-stone-500 italic mb-6 leading-relaxed">
-                          Cocok Untuk: {srv.idealFor}
-                        </p>
-
-                        <div className="border-t border-stone-100 pt-4 mb-8">
-                          <div className="text-[11px] font-mono-code text-stone-400 uppercase tracking-wider mb-3">Cakupan Kerja (Scope):</div>
-                          <ul className="space-y-2.5 text-xs text-stone-700">
-                            {srv.scope.map((item, i) => (
-                              <li key={i} className="flex items-start">
-                                <IconCheck />
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => setCustomWaModal({ open: true, text: srv.waMessage, title: srv.title })}
-                        className="w-full py-3 bg-stone-900 hover:bg-stone-800 text-stone-50 font-sans-editorial text-xs font-bold uppercase tracking-wider flex items-center justify-center transition-colors"
-                      >
-                        <IconWhatsApp className="w-3.5 h-3.5 mr-2 text-emerald-400" />
-                        Tanya via WhatsApp
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* SECTION B: MENTORSHIP & TRAINING */}
-              <div className="mb-20 bg-stone-900 text-stone-100 p-8 md:p-12 rounded-sm shadow-md">
-                <div className="max-w-3xl">
-                  <span className="text-xs font-mono-code uppercase tracking-widest text-amber-300 block mb-2">Peningkatan Kapasitas Tim</span>
-                  <h3 className="font-serif-editorial text-3xl font-bold mb-4">Mentorship 1-on-1 & Pelatihan Excel Organisasi</h3>
-                  <p className="text-stone-300 text-sm leading-relaxed mb-8">
-                    Program bimbingan khusus untuk Junior Business Analyst serta pelatihan in-house pengolahan data otomatis menggunakan Excel Power Query & Looker Studio untuk tim internal perusahaan.
-                  </p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div className="bg-stone-800 p-5 rounded-sm border border-stone-700">
-                      <h4 className="font-serif-editorial font-bold text-white text-lg mb-2">Mentorship BA 1-on-1</h4>
-                      <p className="text-xs text-stone-400 leading-relaxed">
-                        Sesi intensif mingguan tentang pemetaan BPMN, low-code app building, review portofolio studi kasus, serta perselisihan wawancara kerja.
-                      </p>
-                    </div>
-                    <div className="bg-stone-800 p-5 rounded-sm border border-stone-700">
-                      <h4 className="font-serif-editorial font-bold text-white text-lg mb-2">Pelatihan Excel Korporat</h4>
-                      <p className="text-xs text-stone-400 leading-relaxed">
-                        Lokakarya praktis pelatihan staf internal dalam pembersihan data otomatis, pemodelan rumus tingkat lanjut, & dashboard konsolidasi.
-                      </p>
-                    </div>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h1 className="font-serif-editorial text-3xl font-bold mb-8">Paket Layanan Konsultasi</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+              {SERVICES.map(s => (
+                <div key={s.id} className="border border-stone-300 bg-white p-6 rounded flex flex-col justify-between">
+                  <div>
+                    <span className="text-xs font-mono-code text-stone-500 uppercase block">{s.packageCode} • {s.tier}</span>
+                    <h2 className="font-serif-editorial text-xl font-bold my-2">{s.title}</h2>
+                    <p className="text-xs font-mono-code text-stone-600 mb-4">Durasi: {s.duration}</p>
+                    <ul className="space-y-2 mb-6">
+                      {s.scope.map((item, idx) => (
+                        <li key={idx} className="text-xs text-stone-700 flex items-start">
+                          <IconCheck />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
                   <button
-                    onClick={() => handleWaRedirect("Halo Alex, saya berminat diskusi jadwal Mentorship / Pelatihan Excel untuk tim internal kami.")}
-                    className="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-900 font-sans-editorial font-bold text-xs uppercase tracking-wider inline-flex items-center"
+                    onClick={() => handleWaRedirect(s.waMessage)}
+                    className="w-full py-2.5 bg-stone-900 text-stone-50 text-xs font-bold uppercase tracking-wider flex items-center justify-center"
                   >
-                    <IconWhatsApp className="w-4 h-4 mr-2 text-emerald-600" />
-                    Diskusi Jadwal Pelatihan
+                    <IconWhatsApp className="mr-2 text-emerald-400" />
+                    Pilih Paket Ini
                   </button>
                 </div>
-              </div>
-
-              {/* SECTION C: DIGITAL PRODUCTS (LYNK.ID INTEGRATION) */}
-              <div>
-                <h2 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-8 pb-3 border-b border-stone-200">
-                  Produk Digital Siap Unduh (Lynk.id)
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {PRODUCTS.map((prod) => (
-                    <div key={prod.id} className="bg-white border border-stone-200 p-8 rounded-sm shadow-sm flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="px-2 py-0.5 bg-stone-100 text-stone-800 font-mono-code text-[10px] uppercase tracking-wider font-semibold">
-                            {prod.badge}
-                          </span>
-                          <span className="font-serif-editorial text-lg font-bold text-stone-900">{prod.price}</span>
-                        </div>
-                        <h3 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-2">{prod.title}</h3>
-                        <p className="text-stone-600 text-xs leading-relaxed mb-6">{prod.description}</p>
-                      </div>
-
-                      <a
-                        href={prod.lynkUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full text-center py-3 bg-stone-900 hover:bg-stone-800 text-stone-50 font-sans-editorial text-xs font-bold uppercase tracking-wider transition-colors inline-flex items-center justify-center"
-                      >
-                        Beli / Unduh via Lynk.id
-                        <IconExternalLink />
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
+              ))}
             </div>
           </div>
         )}
 
-        {/* ========================================== */}
-        {/* TAB 6: SANITY CMS STUDIO & SITE SETTINGS   */}
-        {/* ========================================== */}
-        {}
+        {/* TAB 6: SANITY STUDIO CMS SCHEMA */}
         {activeTab === 'cms-schema' && (
-          <div className="py-16 bg-stone-900 text-stone-100">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              
-              <div className="mb-8 pb-6 border-b border-stone-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <span className="text-xs font-mono-code uppercase tracking-widest text-amber-400 block mb-2">Headless Sanity.io Studio Integration</span>
-                  <h1 className="font-serif-editorial text-3xl font-bold text-white">Sanity CMS Schemas & Site Settings</h1>
-                  <p className="text-stone-400 text-xs font-mono-code mt-1">
-                    Kontrol konfigurasi situs dan skema TypeScript untuk Post, Case Study, Product, Service, dan Site Settings.
-                  </p>
-                </div>
-              </div>
-
-              {/* LIVE CMS CONTROLLER DEMO */}
-              <div className="bg-stone-800 border border-stone-700 p-6 rounded-sm mb-12">
-                <h2 className="text-sm font-mono-code uppercase text-amber-400 mb-4 flex items-center">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
-                  Live Sanity `siteSettings` Configurator (Uji Coba Tampilan Interaktif)
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono-code">
-                  <div>
-                    <label className="block text-stone-400 mb-1">Judul Headline Hero (`headlineTitle`):</label>
-                    <input
-                      type="text"
-                      value={siteSettings.headlineTitle}
-                      onChange={(e) => setSiteSettings({...siteSettings, headlineTitle: e.target.value})}
-                      className="w-full bg-stone-900 border border-stone-700 text-white p-2 rounded focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-stone-400 mb-1">Nomor WhatsApp Aktif (`waNumber`):</label>
-                    <input
-                      type="text"
-                      value={siteSettings.waNumber}
-                      onChange={(e) => setSiteSettings({...siteSettings, waNumber: e.target.value})}
-                      className="w-full bg-stone-900 border border-stone-700 text-white p-2 rounded focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-
-                  <div className="flex items-center space-x-6 pt-2">
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={siteSettings.showMetrics}
-                        onChange={(e) => setSiteSettings({...siteSettings, showMetrics: e.target.checked})}
-                        className="mr-2"
-                      />
-                      <span>Tampilkan Metrics Banner</span>
-                    </label>
-
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={siteSettings.showTestimonials}
-                        onChange={(e) => setSiteSettings({...siteSettings, showTestimonials: e.target.checked})}
-                        className="mr-2"
-                      />
-                      <span>Tampilkan Testimoni</span>
-                    </label>
-
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={siteSettings.showBanner}
-                        onChange={(e) => setSiteSettings({...siteSettings, showBanner: e.target.checked})}
-                        className="mr-2"
-                      />
-                      <span>Tampilkan Top Banner</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sanity Schema Code Blocks */}
-              <div className="bg-stone-950 rounded border border-stone-800 overflow-hidden">
-                <div className="bg-stone-900 px-6 py-3 border-b border-stone-800 flex items-center justify-between">
-                  <span className="text-xs font-mono-code text-stone-400">sanity/schemas/schemaDefinitions.ts</span>
-                  <button
-                    onClick={() => {
-                      setCopiedCode(true);
-                      setTimeout(() => setCopiedCode(false), 2000);
-                    }}
-                    className="text-xs font-mono-code bg-stone-800 hover:bg-stone-700 text-stone-300 px-3 py-1 rounded transition-colors"
-                  >
-                    {copiedCode ? '✓ Copied' : 'Copy Schemas'}
-                  </button>
-                </div>
-
-                <div className="p-6 font-mono-code text-xs text-emerald-400 leading-relaxed overflow-x-auto max-h-[600px]">
-                  <pre>{`// 1. siteSettings schema (Global Site Configuration)
-export const siteSettingsSchema = {
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+            <h1 className="font-serif-editorial text-3xl font-bold mb-4">Sanity CMS Integration Schema</h1>
+            <p className="text-stone-600 text-sm mb-6">
+              Berikut adalah skema konfigurasi Sanity Studio yang digunakan untuk mengelola data dinamis pada situs editorial ini.
+            </p>
+            <pre className="bg-stone-900 text-stone-100 p-4 rounded font-mono-code text-xs overflow-x-auto">
+{`export default {
   name: 'siteSettings',
-  title: 'Pengaturan Situs',
+  title: 'Site Settings',
   type: 'document',
   fields: [
-    { name: 'analystName', title: 'Nama Analyst & Gelar', type: 'string' },
-    { name: 'headlineTitle', title: 'Judul Headline Utama', type: 'string' },
-    { name: 'subHeadline', title: 'Deskripsi Sub-Headline', type: 'text' },
-    { name: 'waNumber', title: 'Nomor WhatsApp (e.g. 6281234567890)', type: 'string' },
-    { name: 'showMetrics', title: 'Tampilkan Banner Angka Impact', type: 'boolean' },
-    { name: 'showTestimonials', title: 'Tampilkan Seksi Testimoni', type: 'boolean' },
-    { name: 'showBanner', title: 'Tampilkan Top Bar Announcement', type: 'boolean' },
-    { name: 'bannerText', title: 'Teks Top Bar Announcement', type: 'string' }
+    { name: 'analystName', title: 'Analyst Name', type: 'string' },
+    { name: 'headlineTitle', title: 'Headline Title', type: 'string' },
+    { name: 'subHeadline', title: 'Sub-headline', type: 'text' },
+    { name: 'waNumber', title: 'WhatsApp Number', type: 'string' },
+    { name: 'showBanner', title: 'Show Banner', type: 'boolean' },
+    { name: 'bannerText', title: 'Banner Text', type: 'string' },
   ]
-};
-
-// 2. post schema (Articles & Blog)
-export const postSchema = {
-  name: 'post',
-  title: 'Artikel / Blog',
-  type: 'document',
-  fields: [
-    { name: 'title', title: 'Judul Artikel', type: 'string', validation: (Rule) => Rule.required() },
-    { name: 'slug', title: 'URL Slug', type: 'slug', options: { source: 'title' } },
-    { name: 'publishDate', title: 'Tanggal Rilis', type: 'date' },
-    { name: 'category', title: 'Kategori Artikel', type: 'string' },
-    { name: 'readTime', title: 'Estimasi Waktu Baca', type: 'string' },
-    { name: 'excerpt', title: 'Ringkasan Pendek (Excerpt)', type: 'text', rows: 3 },
-    { name: 'content', title: 'Konten Lengkap (Portable Text)', type: 'array', of: [{ type: 'block' }] }
-  ]
-};
-
-// 3. caseStudy schema (Portfolio Reports)
-export const caseStudySchema = {
-  name: 'caseStudy',
-  title: 'Studi Kasus Bisnis',
-  type: 'document',
-  fields: [
-    { name: 'title', title: 'Judul Proyek Laporan', type: 'string', validation: (Rule) => Rule.required() },
-    { name: 'slug', title: 'URL Slug', type: 'slug', options: { source: 'title' } },
-    { name: 'clientCategory', title: 'Kategori Industri Klien', type: 'string' },
-    { name: 'problemStatement', title: 'Pernyataan Masalah (Problem Statement)', type: 'text' },
-    { name: 'solutionSummary', title: 'Ringkasan Solusi', type: 'text' },
-    { name: 'impactMetrics', title: 'Metrik Dampak Bisnis', type: 'array', of: [
-      {
-        type: 'object',
-        fields: [
-          { name: 'label', type: 'string', title: 'Label Metrik' },
-          { name: 'value', type: 'string', title: 'Nilai Terukur' }
-        ]
-      }
-    ]},
-    { name: 'toolsUsed', title: 'Perangkat Lunak / Tools', type: 'array', of: [{ type: 'string' }] }
-  ]
-};
-
-// 4. product schema (Digital Templates)
-export const productSchema = {
-  name: 'product',
-  title: 'Produk Digital',
-  type: 'document',
-  fields: [
-    { name: 'title', title: 'Judul Produk Template', type: 'string' },
-    { name: 'description', title: 'Deskripsi Produk', type: 'text' },
-    { name: 'priceText', title: 'Format Harga (IDR / USD)', type: 'string' },
-    { name: 'lynkUrl', title: 'Tautan Pembelian Lynk.id', type: 'url' }
-  ]
-};
-
-// 5. service schema (Consulting Offerings)
-export const serviceSchema = {
-  name: 'service',
-  title: 'Paket Layanan Konsultasi',
-  type: 'document',
-  fields: [
-    { name: 'packageCode', title: 'Kode Paket (e.g. Paket 1)', type: 'string' },
-    { name: 'title', title: 'Nama Paket Layanan', type: 'string' },
-    { name: 'duration', title: 'Estimasi Durasi Pengerjaan', type: 'string' },
-    { name: 'scopePoints', title: 'Daftar Scope Kerja', type: 'array', of: [{ type: 'string' }] },
-    { name: 'waMessageTemplate', title: 'Teks Pesan Otomatis WhatsApp', type: 'text' }
-  ]
-};`}</pre>
-                </div>
-              </div>
-
-            </div>
+}`}
+            </pre>
           </div>
         )}
 
       </main>
 
-      {/* ========================================== */}
-      {/* MODAL 1: ATS RESUME PREVIEW & DOWNLOAD     */}
-      {/* ========================================== */}
-      {}
-      {cvModalOpen && (
-        <div className="fixed inset-0 z-50 bg-stone-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white text-stone-900 rounded-sm max-w-3xl w-full p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto my-8 border border-stone-300">
-            <button
-              onClick={() => setCvModalOpen(false)}
-              className="absolute top-6 right-6 p-2 text-stone-500 hover:text-stone-900 transition-colors font-mono-code"
-            >
-              ✕ TUTUP
-            </button>
-
-            {/* Printable ATS Content */}
-            <div id="printable-cv" className="font-sans-editorial">
-              <div className="border-b-2 border-stone-900 pb-4 mb-6">
-                <h1 className="text-3xl font-bold uppercase tracking-tight text-stone-900">{siteSettings.analystName}</h1>
-                <p className="text-sm font-semibold text-stone-700 mt-1">Senior Business Analyst & Process Engineer</p>
-                <div className="text-xs font-mono-code text-stone-600 mt-2 flex flex-wrap gap-4">
-                  <span>Jakarta, Indonesia</span>
-                  <span>•</span>
-                  <span>Email: alex.morgan.ba@domain.id</span>
-                  <span>•</span>
-                  <span>WA: +{siteSettings.waNumber}</span>
-                </div>
-              </div>
-
-              <div className="space-y-6 text-xs text-stone-800 leading-relaxed">
-                <div>
-                  <h2 className="text-sm font-bold uppercase border-b border-stone-300 pb-1 mb-2 font-mono-code">Ringkasan Profesional</h2>
-                  <p>
-                    Business Analyst Senior dengan 8+ tahun pengalaman merancang ulang alur kerja operasional, audit SOP, dan integrasi otomasi low-code (AppSheet, Make, SQL, Looker Studio). Terbukti memangkas waktu proses hingga 78% dan menghemat biaya operasional perusahaan logistik & ritel.
-                  </p>
-                </div>
-
-                <div>
-                  <h2 className="text-sm font-bold uppercase border-b border-stone-300 pb-1 mb-2 font-mono-code">Keahlian Utama (Core Skills)</h2>
-                  <div className="grid grid-cols-2 gap-2 font-mono-code">
-                    <div>• Process Mapping: BPMN 2.0, Swimlanes, Miro</div>
-                    <div>• Data Analytics: SQL, Power BI, Looker Studio</div>
-                    <div>• Otomasi: AppSheet, Make, Webhooks API</div>
-                    <div>• Dokumentasi: SOP, RACI Matrix, BRD & FSD</div>
-                  </div>
-                </div>
-
-                <div>
-                  <h2 className="text-sm font-bold uppercase border-b border-stone-300 pb-1 mb-2 font-mono-code">Pengalaman Kerja</h2>
-                  
-                  <div className="mb-4">
-                    <div className="flex justify-between font-bold text-stone-900">
-                      <span>Senior Business Analyst & Consultant — Independen</span>
-                      <span>2023 – Sekarang</span>
-                    </div>
-                    <ul className="list-disc pl-4 space-y-1 mt-1 text-stone-700">
-                      <li>Mendampingi 15+ bisnis UMKM & menengah dalam standarisasi SOP dan integrasi dashboard real-time.</li>
-                      <li>Mengembangkan sistem dispatch otomatis berbasis AppSheet & Make dengan efisiensi error mencapai 0.4%.</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between font-bold text-stone-900">
-                      <span>Lead Systems & Process Analyst — PT LogiTech Solutions Asia</span>
-                      <span>2020 – 2023</span>
-                    </div>
-                    <ul className="list-disc pl-4 space-y-1 mt-1 text-stone-700">
-                      <li>Memimpin tim re-engineering alur kerja 3 hub distribusi utama di Jawa & Sumatra.</li>
-                      <li>Mengurangi pemrosesan pesanan dari 48 jam menjadi 4 jam dengan integrasi webhook ERP.</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div>
-                  <h2 className="text-sm font-bold uppercase border-b border-stone-300 pb-1 mb-2 font-mono-code">Pendidikan & Sertifikasi</h2>
-                  <div className="flex justify-between">
-                    <span><strong>S1 Teknik Industri</strong> — Universitas Indonesia</span>
-                    <span>2014 – 2018</span>
-                  </div>
-                  <p className="text-stone-600 mt-1 font-mono-code">• Certified Business Analysis Professional (CBAP) • Certified Scrum Master (CSM)</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-stone-200 flex justify-between items-center">
-              <span className="text-xs font-mono-code text-stone-500">Format ATS-Friendly siap cetak / PDF</span>
-              <button
-                onClick={() => window.print()}
-                className="px-6 py-2.5 bg-stone-900 hover:bg-stone-800 text-stone-50 font-mono-code text-xs font-bold uppercase tracking-wider inline-flex items-center"
-              >
-                <IconDownload />
-                Cetak / Simpan PDF
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================== */}
-      {/* MODAL 2: CASE STUDY DETAIL REPORT          */}
-      {/* ========================================== */}
-      {}
+      {/* Case Study Detail Modal */}
       {activeCaseStudy && (
-        <div className="fixed inset-0 z-50 bg-stone-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#FAF9F6] rounded-sm max-w-3xl w-full p-6 sm:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto my-8 border border-stone-300">
+        <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 rounded shadow-xl relative">
             <button
               onClick={() => setActiveCaseStudy(null)}
-              className="absolute top-6 right-6 p-2 text-stone-500 hover:text-stone-900 transition-colors font-mono-code"
+              className="absolute top-4 right-4 text-stone-500 hover:text-stone-900 font-bold text-sm"
             >
-              ✕ TUTUP
+              ✕ Tutup
             </button>
-
-            <div className="text-xs font-mono-code text-amber-900 uppercase tracking-widest mb-2">
-              Laporan Studi Kasus • {activeCaseStudy.clientCategory}
+            <span className="text-xs font-mono-code text-stone-500 uppercase">{activeCaseStudy.category}</span>
+            <h2 className="font-serif-editorial text-2xl font-bold my-2">{activeCaseStudy.title}</h2>
+            <div className="my-4 p-4 bg-stone-100 border-l-4 border-stone-900 text-stone-800 text-sm">
+              <strong>Problem:</strong> {activeCaseStudy.problemStatement}
             </div>
-
-            <h2 className="font-serif-editorial text-3xl font-bold text-stone-900 mb-2">
-              {activeCaseStudy.title}
-            </h2>
-
-            {/* Impact Banner */}
-            <div className="bg-white border border-stone-200 p-4 rounded-sm mb-6 grid grid-cols-3 gap-2 text-center my-6">
-              {activeCaseStudy.impactMetrics.map((m, i) => (
-                <div key={i}>
-                  <div className="font-serif-editorial text-xl font-bold text-stone-900">{m.value}</div>
-                  <div className="text-[10px] font-mono-code text-stone-500 uppercase">{m.label}</div>
-                </div>
+            <div className="my-4 text-stone-700 text-sm leading-relaxed">
+              <strong>Solusi:</strong> {activeCaseStudy.solutionSummary}
+            </div>
+            <h4 className="font-bold text-xs uppercase font-mono-code mt-4 mb-2">Tahapan Proses:</h4>
+            <ul className="list-disc list-inside text-xs text-stone-700 space-y-1 mb-6">
+              {activeCaseStudy.processSteps.map((step: string, idx: number) => (
+                <li key={idx}>{step}</li>
               ))}
-            </div>
-
-            {/* Structured Business Report Sections */}
-            <div className="space-y-6 text-sm text-stone-800 leading-relaxed font-sans-editorial">
-              <div>
-                <h3 className="font-serif-editorial font-bold text-stone-900 text-lg mb-1">1. Pernyataan Masalah (Problem Statement)</h3>
-                <p className="bg-white p-4 border border-stone-200 text-stone-700">{activeCaseStudy.problemStatement}</p>
-              </div>
-
-              <div>
-                <h3 className="font-serif-editorial font-bold text-stone-900 text-lg mb-1">2. Tools & Stack Perangkat Lunak</h3>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {activeCaseStudy.toolsUsed.map((t, idx) => (
-                    <span key={idx} className="font-mono-code text-xs bg-stone-200 text-stone-800 px-3 py-1 rounded-sm">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-serif-editorial font-bold text-stone-900 text-lg mb-1">3. Tahapan Eksekusi & Process Flowchart</h3>
-                <ul className="space-y-2 pl-4 list-disc text-xs text-stone-700">
-                  {activeCaseStudy.processSteps.map((step, idx) => (
-                    <li key={idx}>{step}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-serif-editorial font-bold text-stone-900 text-lg mb-1">4. Ringkasan Solusi Akhir</h3>
-                <p className="bg-white p-4 border border-stone-200 text-stone-700">{activeCaseStudy.solutionSummary}</p>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-stone-200 flex justify-end">
-              <button
-                onClick={() => {
-                  const msg = `Halo Alex, saya telah membaca Studi Kasus: "${activeCaseStudy.title}". Saya berminat mendiskusikan implementasi serupa untuk bisnis kami.`;
-                  setActiveCaseStudy(null);
-                  handleWaRedirect(msg);
-                }}
-                className="px-6 py-3 bg-stone-900 hover:bg-stone-800 text-stone-50 font-sans-editorial font-bold text-xs uppercase tracking-wider inline-flex items-center"
-              >
-                <IconWhatsApp className="w-4 h-4 mr-2 text-emerald-400" />
-                Diskusi Solusi Ini via WA
-              </button>
-            </div>
+            </ul>
+            <button
+              onClick={() => handleWaRedirect(`Halo Alex, saya tertarik dengan Studi Kasus: ${activeCaseStudy.title}`)}
+              className="w-full py-3 bg-stone-900 text-stone-50 text-xs font-bold uppercase"
+            >
+              Konsultasikan Proyek Serupa
+            </button>
           </div>
         </div>
       )}
 
-      {/* ========================================== */}
-      {/* MODAL 3: ARTICLE READER                    */}
-      {/* ========================================== */}
-      {}
+      {/* Article Detail Modal */}
       {activeArticle && (
-        <div className="fixed inset-0 z-50 bg-stone-900/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#FAF9F6] rounded-sm max-w-3xl w-full p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto my-8 border border-stone-300">
+        <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 rounded shadow-xl relative">
             <button
               onClick={() => setActiveArticle(null)}
-              className="absolute top-6 right-6 p-2 text-stone-500 hover:text-stone-900 transition-colors font-mono-code"
+              className="absolute top-4 right-4 text-stone-500 hover:text-stone-900 font-bold text-sm"
             >
-              ✕ TUTUP
+              ✕ Tutup
             </button>
-
-            <div className="flex items-center space-x-3 text-xs font-mono-code text-stone-500 mb-4">
-              <span className="font-semibold text-amber-900">{activeArticle.category}</span>
-              <span>•</span>
-              <span>{activeArticle.publishDate}</span>
-              <span>•</span>
-              <span>{activeArticle.readTime}</span>
-            </div>
-
-            <h1 className="font-serif-editorial text-3xl sm:text-4xl font-bold text-stone-900 mb-6 leading-tight">
-              {activeArticle.title}
-            </h1>
-
-            <div className="prose prose-stone max-w-none text-stone-800 font-serif-editorial text-base leading-relaxed space-y-4 border-t border-stone-200 pt-6">
-              {activeArticle.content.split('\n\n').map((paragraph, idx) => {
-                if (paragraph.startsWith('### ')) {
-                  return <h3 key={idx} className="font-serif-editorial text-2xl font-bold text-stone-900 mt-6 mb-2">{paragraph.replace('### ', '')}</h3>;
-                }
-                if (paragraph.startsWith('> ')) {
-                  return <blockquote key={idx} className="border-l-2 border-stone-900 pl-4 italic text-stone-700 my-4">{paragraph.replace('> ', '')}</blockquote>;
-                }
-                return <p key={idx}>{paragraph}</p>;
-              })}
-            </div>
-
-            <div className="mt-10 pt-6 border-t border-stone-200 flex justify-between items-center text-xs font-mono-code text-stone-500">
-              <span>Penulis: {siteSettings.analystName.split(',')[0]}</span>
-              <button
-                onClick={() => setActiveArticle(null)}
-                className="px-4 py-2 bg-stone-900 text-stone-50 font-bold uppercase tracking-wider"
-              >
-                Tutup Artikel
-              </button>
+            <span className="text-xs font-mono-code text-stone-500">{activeArticle.publishDate}</span>
+            <h2 className="font-serif-editorial text-2xl font-bold my-2">{activeArticle.title}</h2>
+            <div className="prose prose-stone text-sm leading-relaxed mt-4 whitespace-pre-line text-stone-800">
+              {activeArticle.content}
             </div>
           </div>
         </div>
       )}
 
-      {/* ========================================== */}
-      {/* MODAL 4: WHATSAPP CUSTOM INQUIRY           */}
-      {/* ========================================== */}
-      {}
-      {customWaModal.open && (
-        <div className="fixed inset-0 z-50 bg-stone-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FAF9F6] rounded-sm max-w-lg w-full p-6 shadow-2xl border border-stone-300 relative">
-            <h3 className="font-serif-editorial text-2xl font-bold text-stone-900 mb-2">Konsultasi via WhatsApp</h3>
-            <p className="text-xs font-mono-code text-stone-500 mb-4">
-              Paket: <strong className="text-stone-900">{customWaModal.title}</strong>
+      {/* Download CV Modal */}
+      {cvModalOpen && (
+        <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white max-w-md w-full p-6 rounded shadow-xl relative text-center">
+            <button
+              onClick={() => setCvModalOpen(false)}
+              className="absolute top-4 right-4 text-stone-500 hover:text-stone-900 font-bold text-sm"
+            >
+              ✕
+            </button>
+            <h3 className="font-serif-editorial text-xl font-bold mb-2">Download Curriculum Vitae</h3>
+            <p className="text-xs text-stone-600 mb-6">
+              Pilih format Resume / CV yang sesuai dengan kebutuhan kualifikasi Anda.
             </p>
-
-            <div className="mb-4">
-              <label className="block text-xs font-mono-code text-stone-700 uppercase tracking-wider mb-2">
-                Draf Pesan Otomatis (Dapat Diubah):
-              </label>
-              <textarea
-                rows={4}
-                value={customWaModal.text}
-                onChange={(e) => setCustomWaModal({ ...customWaModal, text: e.target.value })}
-                className="w-full p-3 bg-white border border-stone-300 rounded-sm text-xs font-mono-code text-stone-800 focus:outline-none focus:border-stone-900"
-              />
-            </div>
-
-            <div className="flex gap-3 justify-end">
+            <div className="space-y-3">
               <button
-                onClick={() => setCustomWaModal({ open: false, text: '', title: '' })}
-                className="px-4 py-2 bg-stone-200 text-stone-800 text-xs font-mono-code uppercase tracking-wider"
+                onClick={() => {
+                  alert('Mengunduh ATS-Friendly Resume PDF...');
+                  setCvModalOpen(false);
+                }}
+                className="w-full py-2.5 border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-all text-xs font-mono-code font-bold uppercase"
               >
-                Batal
+                ATS Format CV (PDF)
               </button>
               <button
                 onClick={() => {
-                  const txt = customWaModal.text;
-                  setCustomWaModal({ open: false, text: '', title: '' });
-                  handleWaRedirect(txt);
+                  alert('Mengunduh Portfolio Executive Ringkas...');
+                  setCvModalOpen(false);
                 }}
-                className="px-5 py-2 bg-stone-900 text-stone-50 text-xs font-mono-code font-bold uppercase tracking-wider flex items-center"
+                className="w-full py-2.5 bg-stone-900 text-white text-xs font-mono-code font-bold uppercase"
               >
-                <IconWhatsApp className="w-3.5 h-3.5 mr-2 text-emerald-400" />
-                Kirim via WhatsApp
+                Executive Portfolio Kit
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Editorial Footer */}
-      <footer className="bg-stone-900 text-stone-300 border-t border-stone-800 py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-2 mb-3">
-                <div className="w-6 h-6 rounded bg-stone-100 text-stone-900 font-serif-editorial font-bold text-xs flex items-center justify-center">
-                  AM
-                </div>
-                <span className="font-serif-editorial text-lg font-bold text-white">{siteSettings.analystName.split(',')[0]}</span>
-              </div>
-              <p className="text-xs text-stone-400 max-w-sm leading-relaxed mb-4">
-                Senior Business Analyst & Process Optimization Advisor. Mengubah kompleksitas operasional menjadi sistem low-code terukur dan control tower akurat.
-              </p>
-              <div className="text-[11px] font-mono-code text-stone-500">
-                © {new Date().getFullYear()} {siteSettings.analystName.split(',')[0]}. Hak Cipta Dilindungi.
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-mono-code uppercase tracking-widest text-stone-200 mb-4">Navigasi Halaman</h4>
-              <ul className="space-y-2 text-xs">
-                <li><button onClick={() => setActiveTab('beranda')} className="hover:text-amber-300">Beranda</button></li>
-                <li><button onClick={() => setActiveTab('tentang')} className="hover:text-amber-300">Tentang & Keahlian</button></li>
-                <li><button onClick={() => setActiveTab('studi-kasus')} className="hover:text-amber-300">Studi Kasus</button></li>
-                <li><button onClick={() => setActiveTab('produk-layanan')} className="hover:text-amber-300">Produk & Layanan</button></li>
-                <li><button onClick={() => setActiveTab('cms-schema')} className="hover:text-amber-300">Sanity Studio CMS</button></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-mono-code uppercase tracking-widest text-stone-200 mb-4">Saluran Profesional</h4>
-              <ul className="space-y-2 text-xs">
-                <li><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-amber-300">LinkedIn Profil</a></li>
-                <li><a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-amber-300">GitHub Repository</a></li>
-                <li><a href="https://medium.com" target="_blank" rel="noreferrer" className="hover:text-amber-300">Medium Blog</a></li>
-                <li><a href="https://lynk.id" target="_blank" rel="noreferrer" className="hover:text-amber-300">Lynk.id Toko Digital</a></li>
-              </ul>
-            </div>
+      {/* Footer */}
+      <footer className="bg-stone-900 text-stone-400 text-xs py-12 border-t border-stone-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+          <div className="font-serif-editorial text-lg text-stone-200">
+            {siteSettings.analystName}
           </div>
+          <p>© 2026 Senior Business Analyst & Process Engineer. All rights reserved.</p>
         </div>
       </footer>
-
-      {/* Floating Sticky WhatsApp Button */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => handleWaRedirect()}
-          className="flex items-center justify-center p-3.5 rounded-full bg-stone-900 text-stone-50 shadow-2xl hover:bg-stone-800 transition-all transform hover:scale-105 active:scale-95 border border-stone-700"
-          title="Konsultasi WhatsApp Langsung"
-        >
-          <IconWhatsApp className="w-6 h-6 text-emerald-400" />
-        </button>
-      </div>
-
     </div>
   );
 }
